@@ -1,0 +1,9 @@
+src/
+*.ts
+!dist/**/*.d.ts
+tsconfig.json
+pixelprobe-output/
+.claude/
+.git/
+.gitignore
+.DS_Store

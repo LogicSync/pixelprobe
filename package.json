@@ -1,25 +1,25 @@
 {
-  "name": "stylediff",
+  "name": "@logicsync/pixelprobe",
   "version": "0.1.0",
   "description": "Responsive visual & style diff for web page sections — CLI + MCP",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "stylediff": "dist/bin/stylediff.js"
+    "pixelprobe": "dist/bin/pixelprobe.js"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
     "start:mcp": "tsx src/mcp/server.ts",
-    "start:cli": "tsx src/bin/stylediff.ts",
+    "start:cli": "tsx src/bin/pixelprobe.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "tsc --noEmit",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
-    "stylediff",
+    "pixelprobe",
     "css",
     "style-diff",
     "visual-regression",
@@ -28,8 +28,23 @@
     "comparison",
     "mcp",
     "cli",
-    "web"
+    "web",
+    "pixel-diff"
   ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/user/pixelprobe.git"
+  },
+  "homepage": "https://github.com/user/pixelprobe#readme",
+  "author": {
+    "name": "Hari",
+    "url": "https://github.com/hari-ls"
+  },
   "license": "MIT",
   "engines": {
     "node": ">=18"

@@ -1,5 +1,6 @@
 node_modules/
 dist/
-stylediff-output/
+pixelprobe-output/
 *.tgz
 .DS_Store
+.claude/

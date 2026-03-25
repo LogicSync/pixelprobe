@@ -9,7 +9,7 @@ import { HTMLReporter } from "../reporter/HTMLReporter.js";
 import { PRESET_BREAKPOINTS } from "../types/config.js";
 
 const server = new McpServer({
-  name: "stylediff",
+  name: "pixelprobe",
   version: "0.1.0",
 });
 
@@ -71,7 +71,7 @@ server.tool(
     outputDir: z
       .string()
       .optional()
-      .describe("Directory to save report artifacts. Default: ./stylediff-output"),
+      .describe("Directory to save report artifacts. Default: ./pixelprobe-output"),
   },
   async (args) => {
     const comparator = new WebSectionComparator({
@@ -95,7 +95,7 @@ server.tool(
       });
 
       // Save reports into a timestamped run directory
-      const baseDir = args.outputDir ?? "./stylediff-output";
+      const baseDir = args.outputDir ?? "./pixelprobe-output";
       const timestamp = new Date()
         .toISOString()
         .replace(/[:.]/g, "-")
@@ -236,7 +236,7 @@ server.tool(
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("stylediff MCP server running on stdio");
+  console.error("pixelprobe MCP server running on stdio");
 }
 
 main().catch((err) => {

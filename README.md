@@ -1,4 +1,4 @@
-# stylediff
+# pixelprobe
 
 Responsive visual & style diff for web page sections — CLI + MCP.
 
@@ -6,17 +6,17 @@ Responsive visual & style diff for web page sections — CLI + MCP.
 
 You're rebuilding a section from a live website. You want to know: does my local build match the original? Where are the styling differences? At which breakpoints do things break?
 
-`stylediff` answers this by comparing **computed styles**, **layout metrics**, and **pixel-level screenshots** between a source URL and a target URL, across multiple responsive breakpoints.
+`pixelprobe` answers this by comparing **computed styles**, **layout metrics**, and **pixel-level screenshots** between a source URL and a target URL, across multiple responsive breakpoints.
 
 It works on any element — full page sections, individual cards, buttons, navbars, footers, or any element you can target with a CSS selector.
 
 ## Install
 
 ```bash
-npm install -g stylediff
+npm install -g pixelprobe
 
 # Or use directly with npx
-npx stylediff compare --help
+npx pixelprobe compare --help
 ```
 
 Requires Node.js 18+. On first run, Playwright will download a Chromium binary (~110MB) if one isn't already installed. You can also install it manually:
@@ -29,7 +29,7 @@ npx playwright install chromium
 
 ```bash
 # Compare a hero section between production and your local build
-stylediff compare \
+pixelprobe compare \
   --source https://example.com \
   --target http://localhost:3000 \
   --selector ".hero-section"
@@ -39,12 +39,12 @@ This will compare the `.hero-section` element at 4 default breakpoints (mobile, 
 
 ## CLI Usage
 
-### `stylediff compare`
+### `pixelprobe compare`
 
 The main command. Compares a section between two URLs across breakpoints.
 
 ```bash
-stylediff compare \
+pixelprobe compare \
   --source <url> \
   --target <url> \
   --selector <css-selector> \
@@ -61,7 +61,7 @@ stylediff compare \
 | `--target-selector` | `-T` | CSS selector on the target page (if different from source) | same as `--selector` |
 | `--index` | `-i` | Element index if selector matches multiple elements | `0` |
 | `--breakpoints` | `-b` | Comma-separated breakpoint names or `WIDTHxHEIGHT` | `mobile,tablet,desktop,desktop-lg` |
-| `--output` | `-o` | Output directory for reports | `./stylediff-output` |
+| `--output` | `-o` | Output directory for reports | `./pixelprobe-output` |
 | `--format` | `-f` | Output format: `json`, `html`, or `both` | `both` |
 | `--threshold` | | Pixel comparison sensitivity (0-1, lower = stricter) | `0.1` |
 | `--wait` | `-w` | Wait N milliseconds after page load before capturing | `0` |
@@ -71,12 +71,12 @@ stylediff compare \
 | `--no-styles` | | Skip computed style comparison | `false` |
 | `--no-layout` | | Skip layout metrics comparison | `false` |
 
-### `stylediff enumerate`
+### `pixelprobe enumerate`
 
 List all elements matching a selector on a page. Useful when your selector matches multiple elements and you need to find the right `--index`.
 
 ```bash
-stylediff enumerate --url <url> --selector <css-selector>
+pixelprobe enumerate --url <url> --selector <css-selector>
 ```
 
 Example output:
@@ -91,7 +91,7 @@ Found 3 element(s) matching ".card":
 Use --index N with the compare command to select a specific element.
 ```
 
-### `stylediff breakpoints`
+### `pixelprobe breakpoints`
 
 List all available breakpoint presets.
 
@@ -121,7 +121,7 @@ Custom breakpoints use `WIDTHxHEIGHT` format and can be mixed with presets:
 When source and target use different markup (e.g. WordPress vs a custom build):
 
 ```bash
-stylediff compare \
+pixelprobe compare \
   --source "https://mysite.com" \
   --target "http://localhost:3000" \
   --selector "#masthead" \
@@ -134,10 +134,10 @@ stylediff compare \
 
 ```bash
 # First, find which index your card is at
-stylediff enumerate --url https://mysite.com --selector ".pricing-card"
+pixelprobe enumerate --url https://mysite.com --selector ".pricing-card"
 
 # Then compare the 2nd card (index 1)
-stylediff compare \
+pixelprobe compare \
   --source "https://mysite.com" \
   --target "http://localhost:3000" \
   --selector ".pricing-card" \
@@ -148,7 +148,7 @@ stylediff compare \
 
 ```bash
 # Get machine-readable output for CI/CD
-stylediff compare \
+pixelprobe compare \
   --source "https://mysite.com" \
   --target "http://localhost:3000" \
   --selector ".hero" \
@@ -160,7 +160,7 @@ Exit codes: `0` = no differences (pass), `1` = differences found, `2` = error.
 ### Compare with strict pixel matching
 
 ```bash
-stylediff compare \
+pixelprobe compare \
   --source "https://mysite.com" \
   --target "http://localhost:3000" \
   --selector ".hero" \
@@ -170,7 +170,7 @@ stylediff compare \
 ### Style-only comparison (skip screenshots)
 
 ```bash
-stylediff compare \
+pixelprobe compare \
   --source "https://mysite.com" \
   --target "http://localhost:3000" \
   --selector ".footer" \
@@ -182,7 +182,7 @@ stylediff compare \
 Each run creates a timestamped directory inside your output folder:
 
 ```
-stylediff-output/
+pixelprobe-output/
 ├── run_2026-03-25_14-30-22_a1b2c3d4/
 │   ├── comparison-a1b2c3d4.json      # Full JSON report
 │   ├── report-a1b2c3d4.html          # Interactive HTML report
@@ -228,7 +228,7 @@ Compares the box model: bounding box dimensions, margin, padding, border widths,
 
 ## MCP Server (for AI Agents)
 
-`stylediff` includes an MCP (Model Context Protocol) server so AI agents can use it as a tool.
+`pixelprobe` includes an MCP (Model Context Protocol) server so AI agents can use it as a tool.
 
 ### Setup
 
@@ -237,9 +237,9 @@ Add to your Claude Desktop or Claude Code MCP config:
 ```json
 {
   "mcpServers": {
-    "stylediff": {
+    "pixelprobe": {
       "command": "node",
-      "args": ["/path/to/stylediff/dist/mcp/server.js"]
+      "args": ["/path/to/pixelprobe/dist/mcp/server.js"]
     }
   }
 }
@@ -262,7 +262,7 @@ Returns all available breakpoint presets with their dimensions.
 ## Programmatic API
 
 ```typescript
-import { WebSectionComparator } from 'stylediff';
+import { WebSectionComparator } from 'pixelprobe';
 
 const comparator = new WebSectionComparator({ headless: true });
 
@@ -307,8 +307,8 @@ Contributions are welcome! Here's how to get started:
 ### Setup
 
 ```bash
-git clone https://github.com/user/stylediff.git
-cd stylediff
+git clone https://github.com/user/pixelprobe.git
+cd pixelprobe
 npm install
 npx playwright install chromium
 ```
@@ -323,7 +323,7 @@ npx tsc --noEmit
 npx tsc
 
 # Run CLI during development
-node dist/bin/stylediff.js compare --help
+node dist/bin/pixelprobe.js compare --help
 
 # Run tests
 npm test
@@ -368,7 +368,7 @@ When filing a bug, please include:
 - [ ] Watch mode for live development
 - [ ] CI/CD integration examples (GitHub Actions, GitLab CI)
 - [ ] Side-by-side source/target screenshots in HTML report
-- [ ] Config file support (`.stylediffrc.json`)
+- [ ] Config file support (`.pixelproberc.json`)
 - [ ] Accessibility attribute comparison
 - [ ] Performance metrics comparison (LCP, CLS)
 

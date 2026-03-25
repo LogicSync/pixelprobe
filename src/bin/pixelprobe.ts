@@ -11,7 +11,7 @@ import { ViewportManager } from "../browser/ViewportManager.js";
 import { PRESET_BREAKPOINTS } from "../types/config.js";
 
 const cli = yargs(hideBin(process.argv))
-  .scriptName("stylediff")
+  .scriptName("pixelprobe")
   .usage("$0 <command> [options]")
   .command(
     "compare",
@@ -59,7 +59,7 @@ const cli = yargs(hideBin(process.argv))
           alias: "o",
           type: "string",
           describe: "Output directory for reports and artifacts",
-          default: "./stylediff-output",
+          default: "./pixelprobe-output",
         })
         .option("format", {
           alias: "f",
