@@ -228,36 +228,202 @@ Compares the box model: bounding box dimensions, margin, padding, border widths,
 
 ## MCP Server (for AI Agents)
 
-`pixelprobe` includes an MCP (Model Context Protocol) server so AI agents can use it as a tool.
+`pixelprobe` includes an [MCP](https://modelcontextprotocol.io) (Model Context Protocol) server, allowing AI coding agents to compare web sections as part of their workflow — for example, verifying that a rebuilt component matches the original design without manual checking.
+
+### Finding the server path
+
+All the setup examples below require the path to `dist/mcp/server.js`. How you find it depends on how you installed pixelprobe:
+
+**Global install** (`npm install -g @logicsync/pixelprobe`):
+
+```bash
+# Find the server path on your system
+node -e "console.log(require.resolve('@logicsync/pixelprobe/dist/mcp/server.js'))"
+```
+
+Typical locations:
+
+| Setup | Path |
+|-------|------|
+| Default (macOS/Linux) | `/usr/local/lib/node_modules/@logicsync/pixelprobe/dist/mcp/server.js` |
+| nvm | `~/.nvm/versions/node/vX.X.X/lib/node_modules/@logicsync/pixelprobe/dist/mcp/server.js` |
+| Homebrew (macOS) | `/opt/homebrew/lib/node_modules/@logicsync/pixelprobe/dist/mcp/server.js` |
+| Windows | `%APPDATA%\npm\node_modules\@logicsync\pixelprobe\dist\mcp\server.js` |
+
+**Local/cloned repo**: run `npm run build` first, then use `./dist/mcp/server.js` from the project root.
+
+> In the examples below, replace `<SERVER_PATH>` with your resolved path.
 
 ### Setup
 
-Add to your Claude Desktop or Claude Code MCP config:
+<details>
+<summary><strong>Claude Code</strong></summary>
+
+```bash
+claude mcp add pixelprobe node <SERVER_PATH>
+```
+
+Or add it to your project's `.mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "pixelprobe": {
       "command": "node",
-      "args": ["/path/to/pixelprobe/dist/mcp/server.js"]
+      "args": ["<SERVER_PATH>"]
     }
   }
 }
 ```
 
+</details>
+
+<details>
+<summary><strong>Claude Desktop</strong></summary>
+
+Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS, `%APPDATA%\Claude\claude_desktop_config.json` on Windows):
+
+```json
+{
+  "mcpServers": {
+    "pixelprobe": {
+      "command": "node",
+      "args": ["<SERVER_PATH>"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Cursor</strong></summary>
+
+Add to your Cursor MCP config (`.cursor/mcp.json` in your project root):
+
+```json
+{
+  "mcpServers": {
+    "pixelprobe": {
+      "command": "node",
+      "args": ["<SERVER_PATH>"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Windsurf</strong></summary>
+
+Add to your Windsurf MCP config (`~/.codeium/windsurf/mcp_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "pixelprobe": {
+      "command": "node",
+      "args": ["<SERVER_PATH>"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>OpenCode</strong></summary>
+
+Add to your OpenCode config (`opencode.json` in your project root):
+
+```json
+{
+  "mcp": {
+    "pixelprobe": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["<SERVER_PATH>"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>OpenAI Codex CLI</strong></summary>
+
+Add to your Codex MCP config (`~/.codex/config.json`):
+
+```json
+{
+  "mcpServers": {
+    "pixelprobe": {
+      "command": "node",
+      "args": ["<SERVER_PATH>"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>Other MCP-compatible agents</strong></summary>
+
+Any agent that supports the MCP stdio transport can use pixelprobe:
+
+```
+node <SERVER_PATH>
+```
+
+</details>
+
 ### MCP Tools
 
 #### `compare_sections`
 
-Full comparison across breakpoints. Accepts `sourceUrl`, `targetUrl`, `selector`, `targetSelector`, `breakpoints`, `pixelThreshold`, and other options. Returns structured JSON diff and saves HTML/JSON reports.
+Full comparison across breakpoints. Returns structured JSON diff and saves HTML/JSON reports.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `sourceUrl` | string | yes | Source URL (the reference/original page) |
+| `targetUrl` | string | yes | Target URL (your local build or new version) |
+| `selector` | string | yes | CSS selector for the section (e.g. `.hero-section`, `#pricing`) |
+| `targetSelector` | string | no | CSS selector on the target page, if different from source |
+| `elementIndex` | number | no | Element index if selector matches multiple elements (default: 0) |
+| `breakpoints` | string[] | no | Breakpoint names or `WIDTHxHEIGHT` values (default: mobile, tablet, desktop, desktop-lg) |
+| `pixelThreshold` | number | no | Pixel comparison sensitivity, 0–1 where lower is stricter (default: 0.1) |
+| `includeVisual` | boolean | no | Include pixel-level visual comparison (default: true) |
+| `includeStyles` | boolean | no | Include computed style comparison (default: true) |
+| `includeLayout` | boolean | no | Include layout metrics comparison (default: true) |
+| `waitForTimeout` | number | no | Wait N ms after page load before capturing (default: 0) |
+| `outputDir` | string | no | Directory to save report artifacts (default: `./pixelprobe-output`) |
 
 #### `capture_section`
 
 Inspect and enumerate elements matching a selector on a page. Useful for discovering element structure before running a comparison.
 
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `url` | string | yes | URL of the page to inspect |
+| `selector` | string | yes | CSS selector for the section |
+| `elementIndex` | number | no | Element index if selector matches multiple (default: 0) |
+| `breakpoint` | string | no | Breakpoint to use (default: `desktop`) |
+
 #### `list_breakpoints`
 
-Returns all available breakpoint presets with their dimensions.
+Returns all available breakpoint presets with their dimensions. Takes no parameters.
+
+### Example agent workflow
+
+A typical AI agent workflow using pixelprobe:
+
+1. **Discover elements** — call `capture_section` with a selector to see what elements exist on the page and their dimensions
+2. **Run comparison** — call `compare_sections` with the source and target URLs to get a full diff
+3. **Read results** — parse the returned JSON summary to identify which breakpoints have issues and what the severity is
+4. **Fix and re-check** — make code changes, then call `compare_sections` again to verify the fix
 
 ## Programmatic API
 
