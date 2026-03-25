@@ -13,10 +13,10 @@ It works on any element — full page sections, individual cards, buttons, navba
 ## Install
 
 ```bash
-npm install -g pixelprobe
+npm install -g @logicsync/pixelprobe
 
 # Or use directly with npx
-npx pixelprobe compare --help
+npx @logicsync/pixelprobe compare --help
 ```
 
 Requires Node.js 18+. On first run, Playwright will download a Chromium binary (~110MB) if one isn't already installed. You can also install it manually:
@@ -53,23 +53,23 @@ pixelprobe compare \
 
 #### Options
 
-| Flag | Short | Description | Default |
-|------|-------|-------------|---------|
-| `--source` | `-s` | Source URL (the reference/original page) | required |
-| `--target` | `-t` | Target URL (your local build or new version) | required |
-| `--selector` | `-S` | CSS selector for the section on the source page | required |
-| `--target-selector` | `-T` | CSS selector on the target page (if different from source) | same as `--selector` |
-| `--index` | `-i` | Element index if selector matches multiple elements | `0` |
-| `--breakpoints` | `-b` | Comma-separated breakpoint names or `WIDTHxHEIGHT` | `mobile,tablet,desktop,desktop-lg` |
-| `--output` | `-o` | Output directory for reports | `./pixelprobe-output` |
-| `--format` | `-f` | Output format: `json`, `html`, or `both` | `both` |
-| `--threshold` | | Pixel comparison sensitivity (0-1, lower = stricter) | `0.1` |
-| `--wait` | `-w` | Wait N milliseconds after page load before capturing | `0` |
-| `--json` | | Output compact JSON to stdout (for piping to other tools) | `false` |
-| `--headed` | | Run browser in visible (non-headless) mode | `false` |
-| `--no-visual` | | Skip pixel-level visual comparison | `false` |
-| `--no-styles` | | Skip computed style comparison | `false` |
-| `--no-layout` | | Skip layout metrics comparison | `false` |
+| Flag                | Short | Description                                                | Default                            |
+| ------------------- | ----- | ---------------------------------------------------------- | ---------------------------------- |
+| `--source`          | `-s`  | Source URL (the reference/original page)                   | required                           |
+| `--target`          | `-t`  | Target URL (your local build or new version)               | required                           |
+| `--selector`        | `-S`  | CSS selector for the section on the source page            | required                           |
+| `--target-selector` | `-T`  | CSS selector on the target page (if different from source) | same as `--selector`               |
+| `--index`           | `-i`  | Element index if selector matches multiple elements        | `0`                                |
+| `--breakpoints`     | `-b`  | Comma-separated breakpoint names or `WIDTHxHEIGHT`         | `mobile,tablet,desktop,desktop-lg` |
+| `--output`          | `-o`  | Output directory for reports                               | `./pixelprobe-output`              |
+| `--format`          | `-f`  | Output format: `json`, `html`, or `both`                   | `both`                             |
+| `--threshold`       |       | Pixel comparison sensitivity (0-1, lower = stricter)       | `0.1`                              |
+| `--wait`            | `-w`  | Wait N milliseconds after page load before capturing       | `0`                                |
+| `--json`            |       | Output compact JSON to stdout (for piping to other tools)  | `false`                            |
+| `--headed`          |       | Run browser in visible (non-headless) mode                 | `false`                            |
+| `--no-visual`       |       | Skip pixel-level visual comparison                         | `false`                            |
+| `--no-styles`       |       | Skip computed style comparison                             | `false`                            |
+| `--no-layout`       |       | Skip layout metrics comparison                             | `false`                            |
 
 ### `pixelprobe enumerate`
 
@@ -262,16 +262,16 @@ Returns all available breakpoint presets with their dimensions.
 ## Programmatic API
 
 ```typescript
-import { WebSectionComparator } from 'pixelprobe';
+import { WebSectionComparator } from "pixelprobe";
 
 const comparator = new WebSectionComparator({ headless: true });
 
 const result = await comparator.compare({
-  sourceUrl: 'https://example.com',
-  targetUrl: 'http://localhost:3000',
-  selector: '.hero-section',
-  targetSelector: '.hero',         // optional, if target uses different markup
-  breakpoints: ['mobile', 'tablet', 'desktop'],
+  sourceUrl: "https://example.com",
+  targetUrl: "http://localhost:3000",
+  selector: ".hero-section",
+  targetSelector: ".hero", // optional, if target uses different markup
+  breakpoints: ["mobile", "tablet", "desktop"],
   pixelThreshold: 0.1,
 });
 
@@ -287,7 +287,7 @@ console.log(result.summary);
 // }
 
 // Enumerate elements before comparing
-const elements = await comparator.enumerate('https://example.com', '.card');
+const elements = await comparator.enumerate("https://example.com", ".card");
 // [{ index: 0, tagName: 'div', textPreview: '...', boundingBox: {...} }, ...]
 ```
 
