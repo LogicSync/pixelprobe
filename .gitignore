@@ -1,0 +1,5 @@
+node_modules/
+dist/
+stylediff-output/
+*.tgz
+.DS_Store
