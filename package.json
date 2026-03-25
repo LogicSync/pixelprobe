@@ -1,6 +1,6 @@
 {
   "name": "@logicsync/pixelprobe",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Responsive visual & style diff for web page sections — CLI + MCP",
   "type": "module",
   "main": "dist/index.js",
@@ -38,9 +38,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/user/pixelprobe.git"
+    "url": "git+https://github.com/LogicSync/pixelprobe.git"
   },
-  "homepage": "https://github.com/user/pixelprobe#readme",
+  "homepage": "https://github.com/LogicSync/pixelprobe#readme",
   "author": {
     "name": "Hari",
     "url": "https://github.com/hari-ls"

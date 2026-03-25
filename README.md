@@ -473,7 +473,7 @@ Contributions are welcome! Here's how to get started:
 ### Setup
 
 ```bash
-git clone https://github.com/user/pixelprobe.git
+git clone https://github.com/LogicSync/pixelprobe.git
 cd pixelprobe
 npm install
 npx playwright install chromium
